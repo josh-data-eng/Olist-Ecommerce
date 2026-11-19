@@ -71,3 +71,59 @@ SELECT o.order_id,
 FROM order_reviews AS os
     INNER JOIN orders AS o ON o.order_id = os.order_id
 WHERE review_score = 1;
+-- 1-7
+SELECT Customer_State,
+    COUNT(order_id) AS Total_Order
+FROM customers AS c
+    INNER JOIN orders AS o ON c.customer_id = o.customer_id
+GROUP BY customer_state
+ORDER BY Total_Order DESC;
+SELECT seller_state,
+    SUM(price) AS Total_Price
+FROM sellers AS s
+    INNER JOIN order_items AS o ON s.seller_id = o.seller_id
+GROUP BY seller_state;
+SELECT product_category_name_english AS Product_Category,
+    COUNT(product_id) AS Products
+FROM product_category_name_translation AS pc
+    INNER JOIN products AS p ON p.product_category_name = pc.product_category_name
+GROUP BY product_category_name_english
+ORDER BY Products DESC
+LIMIT 10;
+SELECT order_status,
+    AVG(review_score) as Average_Score
+FROM orders AS o
+    INNER JOIN order_reviews AS r ON o.order_id = r.order_id
+GROUP BY order_status;
+SELECT p.product_category_name AS Product_Category,
+    COUNT(oi.order_id) AS Items_Sold
+FROM order_items AS oi
+    INNER JOIN products AS p ON oi.product_id = p.product_id
+GROUP BY p.product_category_name
+ORDER BY Items_Sold DESC
+LIMIT 10;
+-- 12-15
+SELECT pt.product_category_name_english AS Category,
+    SUM(oi.price) AS TOTAL_REVENUE
+FROM order_items AS oi
+    INNER JOIN products AS p ON oi.product_id = p.product_id
+    INNER JOIN product_category_name_translation AS pt ON p.product_category_name = pt.product_category_name
+GROUP BY pt.product_category_name_english
+ORDER BY TOTAL_REVENUE DESC;
+SELECT Customer_state,
+    SUM(payment_value) as TOTAL
+FROM customers AS c
+    INNER JOIN orders AS o ON c.customer_id = o.customer_id
+    INNER JOIN order_payments AS op ON o.order_id = op.order_id
+GROUP BY customer_state;
+SELECT Seller_City,
+    COUNT(DISTINCT order_id) AS Orders
+FROM order_items AS oi
+    INNER JOIN sellers AS s ON oi.seller_id = s.seller_id
+GROUP BY seller_city;
+SELECT Customer_state,
+    AVG(review_score) AS Average_Score
+FROM customers AS c
+    INNER JOIN orders AS o ON c.customer_id = o.customer_id
+    INNER JOIN order_reviews as o_r ON o_r.order_id = o.order_id
+GROUP BY customer_state;
